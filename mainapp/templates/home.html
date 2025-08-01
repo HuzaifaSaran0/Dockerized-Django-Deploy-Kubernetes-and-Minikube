@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Django Application | Docker + Kubernetes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4F46E5;
+            --secondary: #7C3AED;
+            --accent: #06B6D4;
+            --dark: #1E293B;
+            --light: #F8FAFC;
+            --success: #10B981;
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="1" fill="white" opacity="0.1"/><circle cx="10" cy="90" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: slideInUp 1s ease-out;
+        }
+
+        .hero .subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: slideInUp 1s ease-out 0.2s both;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Tech Badges */
+        .tech-badges {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 3rem 0;
+            animation: slideInUp 1s ease-out 0.4s both;
+        }
+
+        .tech-badge {
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            padding: 12px 24px;
+            font-weight: 600;
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .tech-badge:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(16, 185, 129, 0.2);
+            color: #10B981;
+            padding: 12px 24px;
+            border-radius: 50px;
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            font-weight: 600;
+            animation: slideInUp 1s ease-out 0.6s both;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #10B981;
+            border-radius: 50%;
+            margin-right: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 0;
+            background: white;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .feature-card h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .feature-card p {
+            color: #64748B;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        /* About Section */
+        .about {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            margin-top: 40px;
+        }
+
+        .about h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            color: var(--dark);
+        }
+
+        .about p {
+            font-size: 1.2rem;
+            color: #64748B;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .highlights-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .highlights-card h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--dark);
+        }
+
+        .highlight-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 10px 0;
+        }
+
+        .check-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .check-icon::after {
+            content: '✓';
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* Architecture Section */
+        .architecture {
+            padding: 100px 0;
+            background: white;
+            text-align: center;
+        }
+
+        .architecture h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 3rem;
+            color: var(--dark);
+        }
+
+        .arch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .arch-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-radius: 20px;
+            padding: 40px;
+            transition: all 0.4s ease;
+        }
+
+        .arch-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .arch-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .arch-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .footer p {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .about h2 {
+                font-size: 2.2rem;
+            }
+
+            .architecture h2 {
+                font-size: 2.2rem;
+            }
+
+            .tech-badges {
+                gap: 10px;
+            }
+
+            .tech-badge {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Modern Django Application</h1>
+                <p class="subtitle">A scalable web application powered by cutting-edge technologies</p>
+
+                <div class="tech-badges">
+                    <span class="tech-badge">Django</span>
+                    <span class="tech-badge">Docker</span>
+                    <span class="tech-badge">Kubernetes</span>
+                    <span class="tech-badge">Python</span>
+                    <span class="tech-badge">Bootstrap</span>
+                </div>
+
+                <div class="status-badge">
+                    <span class="status-dot"></span>
+                    Deployment Ready
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">🚀</span>
+                    <h3>Django Powered</h3>
+                    <p>Built with Django's robust framework for secure, maintainable, and scalable web applications with
+                        powerful ORM and admin interface.</p>
+                </div>
+
+                <div class="feature-card">
+                    <span class="feature-icon">🐳</span>
+                    <h3>Docker Containerized</h3>
+                    <p>Fully containerized with Docker for consistent environments from development to production with
+                        multi-stage builds and optimized layers.</p>
+                </div>
+
+                <div class="feature-card">
+                    <span class="feature-icon">⚓</span>
+                    <h3>Kubernetes Orchestrated</h3>
+                    <p>Designed for Kubernetes deployment with horizontal scaling, self-healing capabilities, and
+                        cloud-native architecture patterns.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about">
+        <div class="container">
+            <div class="about-grid">
+                <div>
+                    <h2>About This Project</h2>
+                    <p>This application demonstrates a modern web development stack using Django as the backend
+                        framework, containerized with Docker for consistent deployment, and orchestrated with Kubernetes
+                        for scalable production environments.</p>
+                    <p>The architecture follows best practices for cloud-native applications with a focus on
+                        reliability, scalability, and maintainability. Every component is designed to work seamlessly in
+                        containerized environments.</p>
+                </div>
+
+                <div class="highlights-card">
+                    <h3>Technical Highlights</h3>
+                    <div class="highlight-item">
+                        <div class="check-icon"></div>
+                        <span>Django's MVT architecture</span>
+                    </div>
+                    <div class="highlight-item">
+                        <div class="check-icon"></div>
+                        <span>Multi-stage Docker builds</span>
+                    </div>
+                    <div class="highlight-item">
+                        <div class="check-icon"></div>
+                        <span>Kubernetes manifests for deployment</span>
+                    </div>
+                    <div class="highlight-item">
+                        <div class="check-icon"></div>
+                        <span>Bootstrap-powered responsive UI</span>
+                    </div>
+                    <div class="highlight-item">
+                        <div class="check-icon"></div>
+                        <span>Self-contained with no external dependencies</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section class="architecture">
+        <div class="container">
+            <h2>Architecture Overview</h2>
+            <div class="arch-grid">
+                <div class="arch-card">
+                    <div class="arch-icon">🏗️</div>
+                    <h3>Development</h3>
+                    <p>Django development server with hot reload, debugging capabilities, and comprehensive testing
+                        suite</p>
+                </div>
+
+                <div class="arch-card">
+                    <div class="arch-icon">📦</div>
+                    <h3>Containerization</h3>
+                    <p>Docker containers for consistent deployment across environments with optimized image layers</p>
+                </div>
+
+                <div class="arch-card">
+                    <div class="arch-icon">☁️</div>
+                    <h3>Orchestration</h3>
+                    <p>Kubernetes for scaling, load balancing, service discovery, and automated deployment management
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>Modern Django Application | Built with ❤️ using open-source technologies</p>
+            <div class="footer-links">
+                <span>Django Framework</span>
+                <span>•</span>
+                <span>Docker Containers</span>
+                <span>•</span>
+                <span>Kubernetes Orchestration</span>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
