@@ -20,12 +20,13 @@
 
 | Category       | Technologies Used |  
 |---------------|------------------|  
+| **Frontend**   | HTML, CSS, Bootstrap | 
 | **Backend**   | Python 3.11, Django |  
 | **DevOps**    | Docker, Kubernetes, Minikube |  
 | **Config**    | YAML |  
 
 ---
-myproject/
+kubernetes_practicing/
 ├── k8s/ # Kubernetes configs
 │ ├── deployment.yaml # K8s Deployment
 │ └── service.yaml # K8s Service
@@ -43,8 +44,7 @@ myproject/
 ### 🔧 Local Development  
 ```bash
 # Clone & setup
-git clone https://github.com/yourusername/your-repo-name.git
-cd your-repo-name
+git clone https://github.com/huzaifasaran0/https://github.com/HuzaifaSaran0/Dockerized-Django-Deploy-Kubernetes-and-Minikube.git
 
 # Create & activate venv (optional)
 python -m venv venv
@@ -82,5 +82,3 @@ Huzaifa Saran
 👨‍💻 DevOps & Backend Engineer | Lifelong Learner
 
 🔹 Feedback? Open an issue or contribute! 🚀
-
-## 📂 Project Structure  
